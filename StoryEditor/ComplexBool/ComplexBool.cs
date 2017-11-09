@@ -6,26 +6,58 @@ using System.Threading.Tasks;
 
 namespace StoryEditor.ComplexBool
 {
-    public class ComplexBool
+    public class ComplexBool : IComplexBoolItem
     {
-        public IComplexBoolItem root;
+        private IComplexBoolItem root;
 
+        public ComplexBool(Func<bool> boolFunc)
+        {
+            root = new CBTreeOperation();
+            Add(root, new CBTreeSimple(boolFunc));
+        }
+        public void Add(IComplexBoolItem parent,IComplexBoolItem child)
+        {
+            if(parent is  CBTreeOperation)
+            {
+                ((CBTreeOperation)parent).ListRights.Add(child);
+            }
+        }
+        public void Add(IComplexBoolItem parent,Func<bool> boolFunc)
+        {
+            if (parent is CBTreeOperation)
+            {
+                ((CBTreeOperation)parent).ListRights.Add(new CBTreeSimple(boolFunc));
+            }
+        }
+        public bool Calculation()
+        {
+           return root.Calculation();
+        }
     }
-    class CBTreeOperation : IComplexBoolItem
+    internal class CBTreeOperation : IComplexBoolItem
     {
-        IComplexBoolItem Right;
-        IComplexBoolItem Left;
+        internal List<IComplexBoolItem> ListRights;
         bool isAnd;
         public bool Calculation()
         {
-                if(isAnd)
+            if (ListRights.Count > 0)
+            {
+                bool Left = ListRights[0].Calculation();
+                foreach (IComplexBoolItem Right in ListRights)
                 {
-                    return Right.Calculation() && Left.Calculation();
+
+                    if (isAnd)
+                    {
+                        Left =  Right.Calculation() && Left;
+                    }
+                    else
+                    {
+                        Left = Right.Calculation() || Left;
+                    }
                 }
-                else
-                {
-                    return Right.Calculation() || Left.Calculation();
-                }   
+                return Left;
+            }
+            return false;
         }
     }
     class CBTreeSimple : IComplexBoolItem
