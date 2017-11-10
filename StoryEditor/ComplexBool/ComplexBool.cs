@@ -10,10 +10,10 @@ namespace StoryEditor.ComplexBool
     {
         private IComplexBoolItem root;
 
-        public ComplexBool(Func<bool> boolFunc)
+        public ComplexBool(string rootsName, Func<bool> boolFunc)
         {
             root = new CBTreeOperation();
-            Add(root, new CBTreeSimple(boolFunc));
+            Add(root, rootsName,boolFunc);
         }
         public void Add(IComplexBoolItem parent,IComplexBoolItem child)
         {
@@ -22,11 +22,11 @@ namespace StoryEditor.ComplexBool
                 ((CBTreeOperation)parent).ListRights.Add(child);
             }
         }
-        public void Add(IComplexBoolItem parent,Func<bool> boolFunc)
+        public void Add(IComplexBoolItem parent, string rootsName, Func<bool> boolFunc)
         {
             if (parent is CBTreeOperation)
             {
-                ((CBTreeOperation)parent).ListRights.Add(new CBTreeSimple(boolFunc));
+                ((CBTreeOperation)parent).ListRights.Add(new CBTreeSimple(rootsName,boolFunc));
             }
         }
         public bool Calculation()
@@ -38,6 +38,12 @@ namespace StoryEditor.ComplexBool
     {
         internal List<IComplexBoolItem> ListRights;
         bool isAnd;
+        public CBTreeOperation()
+        {
+            ListRights = new List<IComplexBoolItem>();
+            isAnd = false;
+        }
+
         public bool Calculation()
         {
             if (ListRights.Count > 0)
@@ -59,17 +65,34 @@ namespace StoryEditor.ComplexBool
             }
             return false;
         }
+        public override string ToString()
+        {
+            if (isAnd)
+            {
+                return "And";
+            }
+            else
+            {
+                return "Or";
+            }
+        }
     }
     class CBTreeSimple : IComplexBoolItem
     {
+        string Name;
         Func<bool> BoolAction;
-        public CBTreeSimple(Func<bool> boolFunc)
+        public CBTreeSimple(string Name, Func<bool> boolFunc)
         {
+            this.Name = Name;
             BoolAction = boolFunc;
         }
         public bool Calculation()
         {
             return BoolAction();
+        }
+        public override string ToString()
+        {
+            return Name;
         }
     }
     public interface IComplexBoolItem

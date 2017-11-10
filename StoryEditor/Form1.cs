@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using StoryEditor.ComplexBool;
 
 namespace StoryEditor
 {
@@ -15,6 +16,14 @@ namespace StoryEditor
         public Form1()
         {
             InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            using (ComplexBoolTester f = new ComplexBoolTester())
+            {
+                f.ShowDialog();
+            }
         }
     }
 }
