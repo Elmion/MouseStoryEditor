@@ -12,8 +12,7 @@ namespace StoryEditor.ComplexBool
 
         public ComplexBool(string rootsName, Func<bool> boolFunc)
         {
-            root = new CBTreeOperation();
-            Add(root, rootsName,boolFunc);
+            root = new CBTreeSimple(rootsName, boolFunc);
         }
         public void Add(IComplexBoolItem parent,IComplexBoolItem child)
         {
@@ -37,7 +36,7 @@ namespace StoryEditor.ComplexBool
     internal class CBTreeOperation : IComplexBoolItem
     {
         internal List<IComplexBoolItem> ListRights;
-        bool isAnd;
+        public bool isAnd { get; set; }
         public CBTreeOperation()
         {
             ListRights = new List<IComplexBoolItem>();
