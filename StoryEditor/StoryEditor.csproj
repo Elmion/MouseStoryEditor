@@ -66,8 +66,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuestEntity\Quest.cs" />
-    <Compile Include="QuestEntity\DiscriptionBlock.cs" />
-    <Compile Include="QuestEntity\QuestStartercs.cs" />
+    <Compile Include="QuestEntity\IQuestBlock.cs" />
+    <Compile Include="QuestEntity\QuestStarter.cs" />
     <Compile Include="UserControl1.cs">
       <SubType>UserControl</SubType>
     </Compile>

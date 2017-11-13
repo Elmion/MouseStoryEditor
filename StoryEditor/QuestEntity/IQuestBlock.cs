@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace QuestEntity
 {
-    class QuestStartercs
+    interface IBlock
     {
+        bool  canStart();
+        IBlock  NextCard();
     }
+
 }
